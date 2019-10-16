@@ -48,7 +48,7 @@ class KMeans:
                 #cv2.waitKey(0)
 
                 # 비교하는 알고리즘을 바꿈 비슷할수록 s가 1에 수렴렴
-               max_dist=0
+                max_dist=0
                 #min_dist = float('inf') # 양의 무한대
                 for i,centroid in enumerate(self.centroids):
                     s = measure.compare_ssim(sample, centroid)
