@@ -5,6 +5,7 @@ import os
 import numpy as np
 import copy
 import cv2
+from skimage import measure
 
 from tqdm import tqdm
 class KMeans:
@@ -45,11 +46,17 @@ class KMeans:
                 #image = sample.reshape(3, 32, 32).transpose(1, 2, 0).astype("uint8")
                 #cv2.imshow('test', image)
                 #cv2.waitKey(0)
-                min_dist = float('inf') # 양의 무한대
+
+                # 비교하는 알고리즘을 바꿈 비슷할수록 s가 1에 수렴렴
+               max_dist=0
+                #min_dist = float('inf') # 양의 무한대
                 for i,centroid in enumerate(self.centroids):
-                    dist = np.linalg.norm(sample-centroid) # sample은 전체데이터, centroid는 랜덤으로 뽑은 데이터
-                    if dist<min_dist:
-                        min_dist = dist
+                    s = measure.compare_ssim(sample, centroid)
+                    #dist = np.linalg.norm(sample-centroid) # sample은 전체데이터, centroid는 랜덤으로 뽑은 데이터
+                    if s>max_dist:
+                        max_dist=s
+                    # if dist<min_dist:
+                    #     min_dist = dist
                         self.predicted_labels[j] = i # 차이가 가장 적을때의 i값(랜덤으로 뽑은 데이터 인덱스)을 예측값으로
                 if self.predicted_labels[j] is not None: # 랜덤으로 뽑은 각 index에 data와 label 저장
                     self.clusters['data'][self.predicted_labels[j]].append(sample)
@@ -157,4 +164,4 @@ class KMeans:
         for i in range(len(self.predicted_labels)):
             self.labels_.append(self.clusters_labels[self.predicted_labels[i]])
         print('[cluster_label,no_occurence_of_label,total_samples_in_cluster,cluster_accuracy]',self.clusters_info)
-        print('Accuracy:',self.accuracy)
+        # print('Accuracy:',self.accuracy)
