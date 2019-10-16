@@ -6,10 +6,7 @@ import numpy as np
 import copy
 import cv2
 
-from PIL import Image
 from tqdm import tqdm
-from DataReader import DataReader
-import pickle
 class KMeans:
     
     def __init__(self,n_clusters=10,max_iter=500, data=[], classname=[]):
@@ -22,13 +19,11 @@ class KMeans:
     def init_centroids(self):
         #np.random.seed(np.random.randint(0,100000))
         self.centroids = []
-        #print(self.data)
         for i in range(self.n_clusters):
             #rand_index = np.random.choice(range(len(self.fit_data)))
             #self.centroids.append(self.fit_data[rand_index])
             #data_reader.plot_img(self.fit_data[rand_index])
             self.centroids.append(self.data[i])
-        #print(self.centroids)
 
     def init_clusters(self):
         self.clusters = {'data':{i:[] for i in range(self.n_clusters)}}
@@ -62,7 +57,7 @@ class KMeans:
                     self.clusters['name'][self.predicted_labels[j]].append(fit_name[j])
             self.reshape_cluster()
             #self.update_centroids()
-            self.calculate_loss()s
+            self.calculate_loss()
             print("\nIteration:",self.iterations,'Loss:',self.loss,'Difference:',self.centroids_dist)
             self.iterations+=1
 
@@ -74,13 +69,13 @@ class KMeans:
         #subDirs = os.listdir(testPath)
         for i in range(self.n_clusters):
             output=outputPath+self.classname[i]
-            print(self.classname[i])
-            print(output)
+            # print(self.classname[i])
+            # print(output)
             if not os.path.isdir(output):
                 os.mkdir(output)
             for j in range(len(self.clusters['name'][i])):
                 savePath=output+'/'+self.clusters['name'][i][j]
-                print(savePath)
+                # print(savePath)
                 for imageFile in imageFileList:
                     if imageFile == self.clusters['name'][i][j]:
                         imgPath=testPath+self.clusters['name'][i][j]
@@ -114,9 +109,6 @@ class KMeans:
             if not cluster.any():
                 self.centroids[i] = self.fit_data[np.random.choice(range(len(self.fit_data)))]
             else:
-                #print(cluster)
-                #print(self.centroids[i].shape)
-                #print(cluster.shape)
                 self.centroids[i] = np.mean(np.vstack((self.centroids[i],cluster)),axis=0) #centroids와 cluster를 수직으로 붙여서 평균
     
     def reshape_cluster(self):
@@ -143,8 +135,8 @@ class KMeans:
         self.clusters_info = []
         self.clusters_accuracy = []
         for clust,labels in list(self.clusters['labels'].items()): # 랜덤으로 값뽑은 값과 비슷하다고 예측된 이미지들의 label
-            print(clust)
-            print(labels)
+            # print(clust)
+            # print(labels)
             if labels==[]:
                 self.clusters_labels.append(clust)
                 continue
@@ -161,7 +153,7 @@ class KMeans:
             self.clusters_accuracy.append(acc)
             self.accuracy = sum(self.clusters_accuracy)/self.n_clusters
         self.labels_ = []
-        print(self.clusters_labels)
+        # print(self.clusters_labels)
         for i in range(len(self.predicted_labels)):
             self.labels_.append(self.clusters_labels[self.predicted_labels[i]])
         print('[cluster_label,no_occurence_of_label,total_samples_in_cluster,cluster_accuracy]',self.clusters_info)
