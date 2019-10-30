@@ -38,7 +38,8 @@ class KMeans:
         self.init_centroids() # n_clusters만큼 data에서 뽑아 centroids생성
         self.iterations = 0
         old_centroids = [np.zeros(shape=(fit_data.shape[1],)) for _ in range(self.n_clusters)] # n_clusters 만큼 zeros
-        while not self.converged(self.iterations,old_centroids,self.centroids): # iter가 max_iter보다 크거나, old와 cen의 벡터길이<=le-20인경우 True
+        while not self.converged(self.iterations,old_centroids,self.centroids): 
+            # iter가 max_iter보다 크거나, old와 cen의 벡터길이<=le-20인경우 True
             old_centroids = copy.deepcopy(self.centroids) # 객체를 복사(즉, 두개 객체)
             self.init_clusters()
             for j,sample in tqdm(enumerate(self.fit_data)):
