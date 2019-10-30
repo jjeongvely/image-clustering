@@ -43,10 +43,6 @@ class KMeans:
             old_centroids = copy.deepcopy(self.centroids) # 객체를 복사(즉, 두개 객체)
             self.init_clusters()
             for j,sample in tqdm(enumerate(self.fit_data)):
-                #print(fit_name[j])
-                #image = sample.reshape(3, 32, 32).transpose(1, 2, 0).astype("uint8")
-                #cv2.imshow('test', image)
-                #cv2.waitKey(0)
 
                 # 비교하는 알고리즘을 바꿈 비슷할수록 s가 1에 수렴렴
                 max_dist=0
